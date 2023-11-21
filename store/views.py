@@ -90,3 +90,7 @@ def processOrder(request):
 		)
 
 	return JsonResponse('Payment submitted..', safe=False)
+
+def sobre(request):
+    context = {}  # Dicionário vazio
+    return render(request, 'store/sobre.html', context)

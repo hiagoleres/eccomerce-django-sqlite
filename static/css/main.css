@@ -1,5 +1,8 @@
 body{
 	background-color: hsl(0, 0%, 98%);
+	display: flex;
+	flex-direction: column;
+	min-height: 100vh;
 }
 
 h1,h2,h3,h4,h5,h6{
@@ -27,6 +30,22 @@ h1,h2,h3,h4,h5,h6{
 
 .bg-dark{
 	background-color: #4f868c!important;
+}
+
+
+.container {
+	flex: 1;
+}
+
+
+.footer {
+	flex-shrink: 0;
+}
+
+#myCarousel img {
+	max-width: 100%; /* Defina a largura máxima como 100% para garantir responsividade */
+	height: 100%;   /* Mantenha a proporção original da imagem */
+	margin: auto;   /* Centralize a imagem horizontalmente */
 }
 
 #cart-icon{
@@ -96,3 +115,4 @@ h1,h2,h3,h4,h5,h6{
 .hidden{
 	display: none!important;
 }
+
