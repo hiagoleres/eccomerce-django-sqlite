@@ -1,15 +1,41 @@
 <html>
 {% load static %}
 {% block content %}
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-	<a class="navbar-brand" href="{% url 'store' %}">
-		<img width="50" height="50" src="{% static 'images/mercado_shops.png' %}" alt="">
-		<b><span style="font-size: 20px;">Mercado Shops</span></b>
-	</a>
-	<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-	  <span class="navbar-toggler-icon"></span>
-	</button>
-    <div class="row">
+	<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+		<a class="navbar-brand" href="{% url 'store' %}">
+			<img width="50" height="50" src="{% static 'images/mercado_shops.png' %}" alt="">
+			<b><span style="font-size: 20px;">Mercado Shops</span></b>
+		</a>
+		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+			<span class="navbar-toggler-icon"></span>
+		</button>
+
+		<div class="collapse navbar-collapse" id="navbarSupportedContent">
+		<ul class="navbar-nav mr-auto">
+			<li class="nav-item active">
+				<a class="nav-link" href="{% url 'sobre' %}" style="font-size: 20px;">Sobre<span class="sr-only">(current)</span></a>
+			</li>
+	
+		</ul>
+		<div class="form-inline my-2 my-lg-0">
+			<a href="#"class="btn btn-warning">Login</a>
+			
+			<a href="{% url 'cart' %}">
+				<img  id="cart-icon" src="{% static 'images/cart.png' %}">
+			</a>
+			<p id="cart-total">{{cartItems}}</p>
+
+		</div>
+		</div>
+	</nav>
+	<head>
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1" />
+
+		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
+		<link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}">
+	</head>
+	<div class="row">
 		<div class="col-lg-6">
 			<div class="box-element" id="form-wrapper">
 				<form id="form">
@@ -40,20 +66,10 @@
 						</div>
 					</div>
 
-  <div class="collapse navbar-collapse" id="navbarSupportedContent">
-	<ul class="navbar-nav mr-auto">
-	  <li class="nav-item active">
-		<a class="nav-link" href="#" style="font-size: 20px;">Sobre<span class="sr-only">(current)</span></a>
-	  </li>
- 
-	</ul>
-	<div class="form-inline my-2 my-lg-0">
-		 <a href="#"class="btn btn-warning">Login</a>
-		 
-		 <a href="{% url 'cart' %}">
-			<img  id="cart-icon" src="{% static 'images/cart.png' %}">
-		</a>
-		<p id="cart-total">{{cartItems}}</p>
+					<hr>
+					<input id="form-button" class="btn btn-success btn-block" type="submit" value="Pagamento">
+				</form>
+			</div>
 
 			<br>
 			<div class="box-element hidden" id="payment-info">
@@ -83,120 +99,9 @@
 			</div>
 		</div>
 	</div>
-  </div>
-</nav>
-	<head>
-		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1" />
 
-		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+	<script src="https://www.paypal.com/sdk/js?client-id=YOUR-CLIENT-ID&currency=USD&disable-funding=credit"></script>
 
-		<link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}">
-	</head>
-	
-		 <div class="row">
-			<div class="col-lg-6">
-				<div class="box-element" id="form-wrapper">
-					<form id="form">
-						<div id="user-info">
-							<div class="form-field">
-								<input required class="form-control" type="text" name="nome" placeholder="Nome">
-							</div>
-							<div class="form-field">
-								<input required class="form-control" type="email" name="email" placeholder="E-mail">
-							</div>
-						</div>
-						
-						<div id="shipping-info">
-							<hr>
-							<p>Endereco de Entrega: </p>
-							<hr>
-							<div class="form-field">
-								<input class="form-control" type="text" name="endereco" placeholder="Endereço">
-							</div>
-							<div class="form-field">
-								<input class="form-control" type="text" name="cidade" placeholder="Cidade">
-							</div>
-							<div class="form-field">
-								<input class="form-control" type="text" name="estado" placeholder="Estado">
-							</div>
-							<div class="form-field">
-								<input class="form-control" type="text" name="cep" placeholder="CEP">
-							</div>
-						</div>
-	
-						<hr>
-						<input id="form-button" class="btn btn-success btn-block" type="submit" value="Pagamento">
-					</form>
-				</div>
-	
-				<br>
-				<div class="box-element hidden" id="payment-info">
-					<small>Opções de Paypal</small>
-					<!--<button id="make-payment">Make payment</button>-->
-					<div id="paypal-button-container"></div>
-				</div>
-				
-			</div>
-	
-			<div class="col-lg-6">
-				<div class="box-element">
-					<a  class="btn btn-outline-dark" href="{% url 'cart' %}">&#x2190; Voltar Para o Carrinho</a>
-					<hr>
-					<h3>Lista de Itens</h3>
-					<hr>
-					{% for item in items %}
-					<div class="cart-row">
-						<div style="flex:2"><img class="row-image" src="{{item.product.imageURL}}"></div>
-						<div style="flex:2"><p>{{item.product.name}}</p></div>
-						<div style="flex:1"><p>R${{item.product.price|floatformat:2}}</p></div>
-						<div style="flex:1"><p>x{{item.quantity}}</p></div>
-					</div>
-					{% endfor %}
-					<h5>Itens:   {{order.get_cart_items}}</h5>
-					<h5>Total:   R${{order.get_cart_total|floatformat:2}}</h5>
-				</div>
-			</div>
-		</div>
-	
-		<script src="https://www.paypal.com/sdk/js?client-id=YOUR-CLIENT-ID&currency=USD&disable-funding=credit"></script>
-	
-		<script>
-			var total = '{{order.get_cart_total}}'
-			// Render the PayPal button into #paypal-button-container
-			paypal.Buttons({
-	
-				style: {
-					color:  'blue',
-					shape:  'rect',
-				},
-	
-				// Set up the transaction
-				createOrder: function(data, actions) {
-					return actions.order.create({
-						purchase_units: [{
-							amount: {
-								value:parseFloat(total).toFixed(2)
-							}
-						}]
-					});
-				},
-	
-				// Finalize the transaction
-				onApprove: function(data, actions) {
-					return actions.order.capture().then(function(details) {
-						// Show a success message to the buyer
-						submitFormData()
-					});
-				}
-	
-			}).render('#paypal-button-container');
-		</script>
-	
-		<script type="text/javascript">
-			var shipping = '{{order.shipping}}'
-	
-			if (shipping == 'False'){
-				 document.getElementById('shipping-info').innerHTML = ''
 	<script>
 		var total = '{{order.get_cart_total}}'
         // Render the PayPal button into #paypal-button-container
@@ -269,88 +174,13 @@
 				'email':null,
 				'total':total,
 			}
-	
-			if (user != 'AnonymousUser'){
-				 document.getElementById('user-info').innerHTML = ''
-			 }
-	
-			if (shipping == 'False' && user != 'AnonymousUser'){
-				//Hide entire form if user is logged in and shipping is false
-					document.getElementById('form-wrapper').classList.add("hidden");
-					//Show payment if logged in user wants to buy an item that does not require shipping
-					document.getElementById('payment-info').classList.remove("hidden");
+
+			var shippingInfo = {
+				'endereco':null,
+				'cidade':null,
+				'estado':null,
+				'cep':null,
 			}
-	
-			var form = document.getElementById('form')
-			form.addEventListener('submit', function(e){
-				e.preventDefault()
-				console.log('Formulário Enviado...')
-				document.getElementById('form-button').classList.add("hidden");
-				document.getElementById('payment-info').classList.remove("hidden");
-			})
-	
-			/*
-			document.getElementById('make-payment').addEventListener('click', function(e){
-				submitFormData()
-			})
-			*/
-	
-			function submitFormData(){
-				console.log('Botão de Pagamento Clicado')
-	
-				var userFormData = {
-					'nome':null,
-					'email':null,
-					'total':total,
-				}
-	
-				var shippingInfo = {
-					'endereco':null,
-					'cidade':null,
-					'estado':null,
-					'cep':null,
-				}
-	
-				if (shipping != 'False'){
-					shippingInfo.endereco = form.endereco.value
-					shippingInfo.cidade = form.cidade.value
-					shippingInfo.estado = form.estado.value
-					shippingInfo.cep = form.cep.value
-				}
-	
-				if (user == 'AnonymousUser'){
-					userFormData.nome = form.nome.value
-					userFormData.email = form.email.value
-				}
-	
-				console.log('Shipping Info: ', shippingInfo)
-				console.log('User Info: ', userFormData)
-	
-				var url = "/process_order/"
-				fetch(url, {
-					method:'POST',
-					headers:{
-						'Content-Type':'applicaiton/json',
-						'X-CSRFToken':csrftoken,
-					}, 
-					body:JSON.stringify({'form':userFormData, 'shipping':shippingInfo}),
-					
-				})
-				.then((response) => response.json())
-				.then((data) => {
-					console.log('Sucesso: ', data);
-					alert('Transação Concluída');  
-	
-					cart = {}
-					document.cookie ='cart=' + JSON.stringify(cart) + ";domain=;path=/"
-	
-					window.location.href = "{% url 'store' %}"
-	
-					})
-			}
-		</script>
-	{% endblock content %}
-</html>
 
 			if (shipping != 'False'){
 	    		shippingInfo.endereco = form.endereco.value
