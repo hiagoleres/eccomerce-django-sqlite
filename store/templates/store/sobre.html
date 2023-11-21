@@ -1,0 +1,39 @@
+{% extends 'store/main.html' %}
+{% load static %}
+{% block content %}
+
+    <div class="row">
+        {% for product in products %}
+            <div class="col-lg-4">
+                <img class="thumbnail" src="{{product.imageURL}}">
+                <div class="box-element product">
+                    <h6><strong>{{product.name}}</strong></h6>
+                    <hr>
+
+                    <button data-product="{{product.id}}" data-action="add" class="btn btn-outline-secondary add-btn update-cart">Adicionar</button>
+
+                    <a class="btn btn-outline-success" href="#">Visualizar</a>
+                    <h4 style="display: inline-block; float: right"><strong>R${{product.price}}</strong></h4>
+
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+
+    <div class="mt-4">
+        
+        <h3>Tema:</h3>
+        <p style="text-align: justify;">  E-Commerce
+    
+        <h3>Objetivo:</h3>
+        <p style="text-align: justify;"> O propósito deste trabalho consiste em criar uma aplicação web e-commerce utilizando o framework Django. A principal meta é desenvolver um sistema que simule com fidelidade a operação de um e-commerce profissional, abrangendo desde a navegação do usuário e seleção de produtos. Este projeto visa aprimorar as habilidades práticas em desenvolvimento web, destacando a capacidade de implementar funcionalidades cruciais para uma experiência de compra online eficaz e envolvente.
+
+        <h3>Desenvolvedores:</h3>
+        <ul>
+            <li>Beatriz Aparecida de Castro | RA: 2840482113032</li>
+            <li>Hiago Leres da Costa | RA: 2840482113031</li>
+            <li>Ítalo Leonardo Lima dos Santos | RA: 2840482113031</li>
+        </ul>
+    </div>
+
+{% endblock content %}
