@@ -94,3 +94,7 @@ def processOrder(request):
 def sobre(request):
     context = {}  # Dicionário vazio
     return render(request, 'store/sobre.html', context)
+
+def login(request):
+	context = {}
+	return render(request, 'store/login.html', context)
