@@ -92,8 +92,15 @@ def processOrder(request):
 	return JsonResponse('Payment submitted..', safe=False)
 
 def sobre(request):
-    context = {}  # Dicionário vazio
-    return render(request, 'store/sobre.html', context)
+	data = cartData(request)
+
+	cartItems = data['cartItems']
+	order = data['order']
+	items = data['items']
+
+	products = Product.objects.all()
+	context = {'products':products, 'cartItems':cartItems}
+	return render(request, 'store/sobre.html', context)
 
 def login(request):
 	context = {}
