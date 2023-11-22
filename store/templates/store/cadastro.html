@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>Login Page</title>
+    <title>Cadastro</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <style>
         body {
@@ -21,19 +21,31 @@
 <div class="container login-container">
     <div class="card">
         <div class="card-body">
-            <h2 class="text-center">Login</h2>
+            <h2 class="text-center">Cadastro</h2>
             <form>
                 <div class="form-group">
+                    <label for="firstname">Nome:</label>
+                    <input type="text" class="form-control" id="firstname" placeholder="Digite seu nome">
+                </div>
+                <div class="form-group">
+                    <label for="lastname">Sobrenome:</label>
+                    <input type="text" class="form-control" id="lastname" placeholder="Digite seu sobrenome">
+                </div>
+                <div class="form-group">
                     <label for="username">Email:</label>
-                    <input type="text" class="form-control" id="username" placeholder="Entre com seu usuário">
+                    <input type="text" class="form-control" id="username" placeholder="Digite seu email">
                 </div>
                 <div class="form-group">
                     <label for="password">Senha:</label>
-                    <input type="password" class="form-control" id="password" placeholder="Entre com sua senha">
+                    <input type="password" class="form-control" id="password" placeholder="Digite sua senha">
                 </div>
-                <button type="submit" class="btn btn-primary btn-block">Login</button>
+                <div class="form-group">
+                    <label for="confirm_password">Confirme sua senha:</label>
+                    <input type="password" class="form-control" id="confirm_password" placeholder="Confirme sua senha">
+                </div>
+                <button type="submit" class="btn btn-primary btn-block">Cadastrar</button>
             </form>
-            <p class="text-center mt-3">Não tem uma conta? <a href="{% url 'cadastro' %}">Cadastre-se!</a></p>
+            <p class="text-center mt-3">Já tem uma conta? <a href="{% url 'login' %}">Realizar login</a></p>
         </div>
     </div>
 </div>
