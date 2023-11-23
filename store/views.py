@@ -1,10 +1,12 @@
 from django.shortcuts import render
 from django.http import JsonResponse
+from django.contrib.auth.decorators import login_required
 import json
 import datetime
 from .models import * 
 from .utils import cookieCart, cartData, guestOrder
 
+@login_required
 def store(request):
 	data = cartData(request)
 
@@ -16,6 +18,7 @@ def store(request):
 	context = {'products':products, 'cartItems':cartItems}
 	return render(request, 'store/store.html', context)
 
+@login_required
 def cart(request):
 	data = cartData(request)
 
@@ -26,6 +29,7 @@ def cart(request):
 	context = {'items':items, 'order':order, 'cartItems':cartItems}
 	return render(request, 'store/cart.html', context)
 
+@login_required
 def checkout(request):
 	data = cartData(request)
 	
@@ -36,6 +40,7 @@ def checkout(request):
 	context = {'items':items, 'order':order, 'cartItems':cartItems}
 	return render(request, 'store/checkout.html', context)
 
+@login_required
 def updateItem(request):
 	data = json.loads(request.body)
 	productId = data['productId']
@@ -61,6 +66,7 @@ def updateItem(request):
 
 	return JsonResponse('Item was added', safe=False)
 
+@login_required
 def processOrder(request):
 	transaction_id = datetime.datetime.now().timestamp()
 	data = json.loads(request.body)
@@ -90,6 +96,7 @@ def processOrder(request):
 
 	return JsonResponse('Payment submitted..', safe=False)
 
+@login_required
 def sobre(request):
 	data = cartData(request)
 
@@ -101,10 +108,8 @@ def sobre(request):
 	context = {'products':products, 'cartItems':cartItems}
 	return render(request, 'store/sobre.html', context)
 
-def login(request):
-	context = {}
-	return render(request, 'store/login.html', context)
 
+@login_required
 def promocoes(request):
 	data = cartData(request)
 
@@ -116,6 +121,7 @@ def promocoes(request):
 	context = {'products':products, 'cartItems':cartItems}
 	return render(request, 'store/promocoes.html', context)
 
+@login_required
 def atendimento(request):
 	data = cartData(request)
 
@@ -127,6 +133,7 @@ def atendimento(request):
 	context = {'products':products, 'cartItems':cartItems}
 	return render(request, 'store/atendimento.html', context)
 
+@login_required
 def cadastro(request):
 	data = cartData(request)
 

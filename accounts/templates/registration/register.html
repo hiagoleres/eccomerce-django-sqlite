@@ -1,0 +1,38 @@
+
+{% block content %} 
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Cadastro</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .login-container {
+            max-width: 350px;
+            margin: auto;
+            margin-top: 50px;
+        }
+    </style>
+</head>
+
+<div class="container login-container">
+    <div class="card">
+        <div class="card-body">
+            <h2 class="text-center">Criar uma conta</h4>
+                
+            <br>
+
+            <form method="post">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button class="btn btn-warning mt-3" type="submit">Registrar</button>
+            </form>
+        </div>
+        
+    </div>
+   
+</div>
+{% endblock %}
