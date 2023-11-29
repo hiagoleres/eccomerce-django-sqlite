@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <title>Relatório - Produtos</title>
+</head>
+<body>
+    <h1>Relatório - Produtos</h1>
+
+    <div id="popupContainer"></div>
+
+    <button onclick="exportarRelatorio()">Exportar relatório</button>
+
+    <hr>
+
+    <h1>Importar Produtos</h1>
+
+    <form id="importarForm" enctype="multipart/form-data">
+        <label for="jsonFile">Selecione o arquivo JSON:</label>
+        <input type="file" id="jsonFile" name="jsonFile" accept=".json">
+        <br>
+        <button type="button" onclick="enviarArquivo()">Enviar</button>
+    </form>
+
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+
+    <script>
+        function mostrarPopup(tipo, mensagem) {
+            const popupContainer = document.getElementById('popupContainer');
+
+            // Cria um elemento div para o popup com classes do Bootstrap
+            const popupDiv = document.createElement('div');
+            popupDiv.classList.add('alert', `alert-${tipo}`, 'alert-dismissible', 'fade', 'show');
+            popupDiv.innerHTML = `
+                <strong>${tipo === 'danger' ? 'Erro' : 'Sucesso'}:</strong> ${mensagem}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Fechar"> X </button>
+            `;
+
+            // Adiciona o popup ao contêiner
+            popupContainer.innerHTML = '';
+            popupContainer.appendChild(popupDiv);
+
+            // Remove o popup após alguns segundos (opcional)
+            setTimeout(() => {
+                popupContainer.innerHTML = '';
+            }, 3000); // Remove após 5 segundos (ajuste conforme necessário)
+        }
+
+        function exportarRelatorio() {
+           
+           fetch('/exportar-relatorio/')
+               .then(response => response.blob())
+               .then(blob => {
+                   
+                   const url = window.URL.createObjectURL(new Blob([blob]));
+                   const a = document.createElement('a');
+                   a.href = url;
+                   a.download = 'relatorio_produtos.json';
+                   document.body.appendChild(a);
+                   a.click();
+                   document.body.removeChild(a);
+                   window.URL.revokeObjectURL(url);
+                   mostrarPopup('success', 'Relatório exportado com sucesso!');
+               })
+               .catch(error => {
+                    mostrarPopup('danger', 'Erro no relatório!');
+                    console.error('Erro ao exportar relatório:', error);
+               });
+       }
+
+        function enviarArquivo() {
+            const input = document.getElementById('jsonFile');
+            const file = input.files[0];
+
+            if (file) {
+                const formData = new FormData();
+                formData.append('jsonFile', file);
+
+                fetch('/importar-produtos/', {
+                    method: 'POST',
+                    body: formData,
+                })
+                .then(response => response.json())
+                .then(data => {
+                    mostrarPopup('success', 'Relatório exportado com sucesso!');
+                    console.log(data);
+                })
+                .catch(error => {
+                    mostrarPopup('danger', 'Relatório exportado com sucesso!');
+                    console.error('Erro ao enviar arquivo:', error);
+                });
+            } else {
+                mostrarPopup('danger', 'Relatório exportado com sucesso!');
+                console.error('Nenhum arquivo selecionado.');
+            }
+        }
+    </script>
+</body>
+</html>

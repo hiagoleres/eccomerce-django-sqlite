@@ -13,4 +13,7 @@ urlpatterns = [
     path('cadastro/', views.cadastro, name="cadastro"),
     path('promocoes/', views.promocoes, name="promocoes"),
     path('atendimento/', views.atendimento, name="atendimento"),
+	path('relatorio/', views.relatorios, name="relatorios"),
+	path('exportar-relatorio/', views.exportarRelatorio, name='exportar_relatorio'),
+	path('importar-produtos/', views.importarProdutos, name='importar_produtos'),
 ]

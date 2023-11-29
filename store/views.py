@@ -1,9 +1,11 @@
 from django.shortcuts import render
-from django.http import JsonResponse
+from django.http import JsonResponse, FileResponse
+from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
 import json
 import datetime
 from .models import * 
+from django.views.decorators.csrf import csrf_exempt
 from .utils import cookieCart, cartData, guestOrder
 
 @login_required
@@ -144,3 +146,68 @@ def cadastro(request):
 	products = Product.objects.all()
 	context = {'products':products, 'cartItems':cartItems}
 	return render(request, 'store/cadastro.html', context)
+
+@login_required
+def relatorios(request):
+    context = {}
+    return render(request, 'store/relatorios.html', context)
+
+@login_required
+def exportarRelatorio(request):
+    produtos = Product.objects.all()
+
+    produtos_list = []
+
+    for produto in produtos:
+        produtos_list.append({
+            'name': produto.name,
+            'price': produto.price,
+            'digital': produto.digital,
+            'imageURL': produto.imageURL,
+        })
+
+    produtos_json = json.dumps(produtos_list, indent=2)
+   
+    response = HttpResponse(content_type='application/json')
+    response['Content-Disposition'] = 'attachment; filename="relatorio_produtos.json"'
+    
+    response.write(produtos_json)
+
+    return response
+
+@csrf_exempt
+def importarProdutos(request):
+    if request.method == 'POST':
+        try:
+            json_file = request.FILES.get('jsonFile')
+
+            if json_file:
+                json_data = json.loads(json_file.read().decode('utf-8'))
+
+                for produto_data in json_data:
+                    nome_produto = produto_data.get('name')
+                    imagem_produto = produto_data.get('imageURL')
+
+                    produto, created = Product.objects.get_or_create(
+                        name=nome_produto,
+                        defaults={
+                            'price': produto_data.get('price'),
+                            'digital': produto_data.get('digital', False),
+                            'image': produto_data.get('imageURL'),  # Corrigido para 'image'
+                        }
+                    )
+					
+                    if not created:
+                        produto.price = produto_data.get('price')
+                        produto.digital = produto_data.get('digital', False)
+                        produto.image = produto_data.get('imageURL')  # Corrigido para 'image'
+                        produto.save()
+
+                return JsonResponse({'message': 'Produtos importados com sucesso.'})
+            else:
+                return JsonResponse({'error': 'Nenhum arquivo enviado.'}, status=400)
+
+        except json.JSONDecodeError as e:
+            return JsonResponse({'error': f'Erro ao decodificar JSON: {str(e)}'}, status=400)
+
+    return JsonResponse({'error': 'Método não permitido'}, status=405)
