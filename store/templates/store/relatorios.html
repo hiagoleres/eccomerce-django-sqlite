@@ -84,7 +84,7 @@
                 })
                 .then(response => response.json())
                 .then(data => {
-                    mostrarPopup('success', 'Relatório exportado com sucesso!');
+                    mostrarPopup('success', 'Arquivo importado com sucesso!');
                     console.log(data);
                 })
                 .catch(error => {
@@ -92,7 +92,7 @@
                     console.error('Erro ao enviar arquivo:', error);
                 });
             } else {
-                mostrarPopup('danger', 'Relatório exportado com sucesso!');
+                mostrarPopup('danger', 'Erro ao importar arquivo!');
                 console.error('Nenhum arquivo selecionado.');
             }
         }
