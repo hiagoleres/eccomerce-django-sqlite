@@ -24,6 +24,8 @@
         <button type="button" onclick="enviarArquivo()">Enviar</button>
     </form>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.5/jszip.min.js"></script>
+
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
 
     <script>
@@ -49,26 +51,46 @@
         }
 
         function exportarRelatorio() {
-           
-           fetch('/exportar-relatorio/')
-               .then(response => response.blob())
-               .then(blob => {
-                   
-                   const url = window.URL.createObjectURL(new Blob([blob]));
-                   const a = document.createElement('a');
-                   a.href = url;
-                   a.download = 'relatorio_produtos.json';
-                   document.body.appendChild(a);
-                   a.click();
-                   document.body.removeChild(a);
-                   window.URL.revokeObjectURL(url);
-                   mostrarPopup('success', 'Relatório exportado com sucesso!');
-               })
-               .catch(error => {
-                    mostrarPopup('danger', 'Erro no relatório!');
+            fetch('/exportar-relatorio/')
+                .then(response => response.json())
+                .then(data => {
+                    // Criar um arquivo JSON a partir dos dados recebidos
+                    const jsonString = JSON.stringify(data);
+                    const jsonBlob = new Blob([jsonString], { type: 'application/json' });
+
+                    // Criar um arquivo ZIP contendo o arquivo JSON
+                    const zip = new JSZip();
+                    zip.file('relatorio_produtos.json', jsonBlob);
+
+                    // Criar o URL do arquivo ZIP
+                    return zip.generateAsync({ type: 'blob' });
+                })
+                .then(zipBlob => {
+                    // Criar o URL do arquivo ZIP
+                    const zipUrl = window.URL.createObjectURL(zipBlob);
+
+                    // Criar o elemento de link para download
+                    const a = document.createElement('a');
+                    a.href = zipUrl;
+                    a.download = 'relatorio_produtos.zip';
+                    document.body.appendChild(a);
+
+                    // Clicar no link para iniciar o download
+                    a.click();
+
+                    // Remover o elemento de link
+                    document.body.removeChild(a);
+
+                    // Revogar o URL do arquivo ZIP
+                    window.URL.revokeObjectURL(zipUrl);
+
+                    mostrarPopup('success', 'Relatório exportado com sucesso!');
+                })
+                .catch(error => {
+                    mostrarPopup('danger', 'Erro ao exportar relatório: ' + error);
                     console.error('Erro ao exportar relatório:', error);
-               });
-       }
+                });
+        }
 
         function enviarArquivo() {
             const input = document.getElementById('jsonFile');
