@@ -93,31 +93,40 @@
         }
 
         function enviarArquivo() {
-            const input = document.getElementById('jsonFile');
-            const file = input.files[0];
+    const input = document.getElementById('jsonFile');
+    const file = input.files[0];
 
-            if (file) {
-                const formData = new FormData();
-                formData.append('jsonFile', file);
+    if (file) {
+        const reader = new FileReader();
 
-                fetch('/importar-produtos/', {
-                    method: 'POST',
-                    body: formData,
-                })
-                .then(response => response.json())
-                .then(data => {
-                    mostrarPopup('success', 'Arquivo importado com sucesso!');
-                    console.log(data);
-                })
-                .catch(error => {
-                    mostrarPopup('danger', 'Relatório exportado com sucesso!');
-                    console.error('Erro ao enviar arquivo:', error);
-                });
-            } else {
+        reader.onload = function (e) {
+            const jsonData = e.target.result;
+
+            // Modificação: Use a função fetch para enviar uma solicitação POST para a view Django
+            fetch('/importar-produtos/', {
+                method: 'POST',
+                body: `jsonData=${encodeURIComponent(jsonData)}`,
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+            })
+            .then(response => response.json())
+            .then(data => {
+                mostrarPopup('success', 'Arquivo importado com sucesso!');
+                console.log(data);
+            })
+            .catch(error => {
                 mostrarPopup('danger', 'Erro ao importar arquivo!');
-                console.error('Nenhum arquivo selecionado.');
-            }
-        }
+                console.error('Erro ao enviar arquivo:', error);
+            });
+        };
+
+        reader.readAsText(file);
+    } else {
+        mostrarPopup('danger', 'Erro ao importar arquivo!');
+        console.error('Nenhum arquivo selecionado.');
+    }
+}
     </script>
 </body>
 </html>

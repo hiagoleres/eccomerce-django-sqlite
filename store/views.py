@@ -1,3 +1,5 @@
+import requests
+import os
 from django.shortcuts import render
 from django.http import JsonResponse, FileResponse
 from django.http import HttpResponse
@@ -7,6 +9,8 @@ import datetime
 from .models import * 
 from django.views.decorators.csrf import csrf_exempt
 from .utils import cookieCart, cartData, guestOrder
+
+from urllib import request
 
 @login_required
 def store(request):
@@ -179,33 +183,28 @@ def exportarRelatorio(request):
 def importarProdutos(request):
     if request.method == 'POST':
         try:
-            json_file = request.FILES.get('jsonFile')
+            json_data = json.loads(request.POST.get('jsonData'))
 
-            if json_file:
-                json_data = json.loads(json_file.read().decode('utf-8'))
+            for produto_data in json_data:
+                nome_produto = produto_data.get('name')
+                imagem_produto = produto_data.get('imageURL')
 
-                for produto_data in json_data:
-                    nome_produto = produto_data.get('name')
-                    imagem_produto = produto_data.get('imageURL')
+                produto, created = Product.objects.get_or_create(
+                    name=nome_produto,
+                    defaults={
+                        'price': produto_data.get('price'),
+                        'digital': produto_data.get('digital', False),
+                        'image': produto_data.get('imageURL'),  # Caminho absoluto corrigido
+                    }
+                )
 
-                    produto, created = Product.objects.get_or_create(
-                        name=nome_produto,
-                        defaults={
-                            'price': produto_data.get('price'),
-                            'digital': produto_data.get('digital', False),
-                            'image': produto_data.get('imageURL'),  # Corrigido para 'image'
-                        }
-                    )
-					
-                    if not created:
-                        produto.price = produto_data.get('price')
-                        produto.digital = produto_data.get('digital', False)
-                        produto.image = produto_data.get('imageURL')  # Corrigido para 'image'
-                        produto.save()
+                if not created:
+                    produto.price = produto_data.get('price')
+                    produto.digital = produto_data.get('digital', False)
+                    produto.image = produto_data.get('imageURL')  # Caminho absoluto corrigido
+                    produto.save()
 
-                return JsonResponse({'message': 'Produtos importados com sucesso.'})
-            else:
-                return JsonResponse({'error': 'Nenhum arquivo enviado.'}, status=400)
+            return JsonResponse({'message': 'Produtos importados com sucesso.'})
 
         except json.JSONDecodeError as e:
             return JsonResponse({'error': f'Erro ao decodificar JSON: {str(e)}'}, status=400)
