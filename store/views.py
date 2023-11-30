@@ -1,5 +1,3 @@
-import requests
-import os
 from django.shortcuts import render
 from django.http import JsonResponse, FileResponse
 from django.http import HttpResponse

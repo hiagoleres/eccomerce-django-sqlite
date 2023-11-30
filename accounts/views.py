@@ -5,18 +5,16 @@ from django.contrib import messages
 from store.models import Customer 
 
 def register(request):
-    form = UserCreationForm()  # Use UserCreationForm padrão para criar superusuário
-
+    form = UserCreationForm()  
     if request.method == "POST":
         form = UserCreationForm(request.POST)
 
         if form.is_valid():
             user = form.save(commit=False)
             user.is_superuser = True
-            user.is_staff = True   # Defina is_staff como True para conceder privilégios de superusuário
+            user.is_staff = True  
             user.save()
 
-            # Autentique e faça login automaticamente após o registro
             user = authenticate(username=user.username, password=form.cleaned_data['password1'])
 
             customer = Customer.objects.create(user=user, name = user.username, email=user.email)
