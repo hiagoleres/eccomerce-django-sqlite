@@ -4,7 +4,7 @@ O MercadoShops é uma plataforma de e-commerce especializada em produtos de tecn
 
 ## Funcionalidades Principais
 
-![image](https://github.com/hiagoleres/eccomerce-django-sqlite/assets/103448942/60b94718-5c3a-4458-808c-b70303c9e311)
+![image](https://github.com/hiagoleres/eccomerce-django-sqlite/assets/103448942/f4c7a1ff-7e93-466f-b41e-afdbf07a3d13)
 
 
 - **Autenticação**: Autenticação de usuários atravez do Django Autenticate
