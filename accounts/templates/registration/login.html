@@ -1,5 +1,4 @@
 {% block title %}{% endblock %}
-
 {% block content %}
 
 <head>
@@ -12,10 +11,40 @@
             background-color: #f8f9fa;
         }
         .login-container {
-            max-width: 400px;
+            max-width: 500px; /* Aumentei o tamanho máximo do contêiner para 600px */
             margin: auto;
-            margin-top: 100px;
+            margin-top: 230px;
         }
+        .orange-button,
+        .orange-button:hover,
+        .btn-orange,
+        .btn-orange:hover {
+            background-color: #ff8c00;
+            border-color: #ff8c00;
+            color: #fff;
+            font-size: 24px;
+            padding: 8px;
+        }
+        /* Estilo da sombra quando o botão está ativo (clicado) */
+        .orange-button:active,
+        .btn-orange:active {
+            box-shadow: 0 0 0 0.2rem rgba(255, 140, 0, 0.5); /* Ajuste a cor da sombra externa aqui */
+        }
+            .form-label {
+                font-size: 20px; /* Aumentei o tamanho da fonte para 20px */
+            }
+            .form-control {
+                font-size: 20px; /* Aumentei o tamanho da fonte para 20px */
+            }
+            .form-control:focus {
+                border-color: #ff8c00; /* Cor da borda ao focar (clicar) */
+                box-shadow: 0 0 0 0.2rem rgba(255, 140, 0, 0.25); /* Sombra ao focar */
+            }
+            .orange-link,
+            .orange-link:hover {
+                color: #ff8c00; /* cor laranja para os links */
+                font-size: 18px; /* Aumentei o tamanho da fonte para 18px */
+            }
     </style>
 </head>
 
@@ -35,16 +64,12 @@
                     <input type="password" name="password" class="form-control">
                 </div>
         
-                <button class="btn btn-primary btn-block" type="submit">Entrar</button>
+                <button class="btn btn-orange btn-block orange-button" type="submit">Entrar</button>
             </form>
-            
-            <a href="{% url 'password_reset' %}">Esqueci minha senha</a>
 
-            <p class="text-center mt-3">Não tem uma conta? <a href="{% url 'register' %}">Cadastre-se!</a></p>
+            <p class="text-center mt-3">Não tem uma conta? <a href="{% url 'register' %}" class="orange-link">Cadastre-se!</a></p>
         </div>
-        
     </div>
-    
 </div>
 
 {% endblock %}

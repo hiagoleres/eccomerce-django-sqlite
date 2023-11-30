@@ -5,27 +5,83 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <title>Relatório - Produtos</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f8f9fa; /* Cor de fundo mais clara */
+        }
+
+        .container {
+            background-color: #ffffff; /* Cor de fundo do container */
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #000; /* Preto */
+        }
+
+        hr {
+            border: 1px solid #ff8c00; /* Laranja */
+            margin: 20px 0;
+        }
+
+        button {
+            padding: 10px;
+            background-color: #ff8c00; /* Laranja */
+            color: #fff;
+            border: none;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #d17f00; /* Laranja mais escuro */
+        }
+
+        #popupContainer {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            width: 300px;
+            z-index: 1000;
+        }
+
+        .alert {
+            margin-bottom: 10px;
+        }
+
+        label {
+            color: #ff8c00; /* Laranja */
+        }
+    </style>
 </head>
 <body>
-    <h1>Relatório - Produtos</h1>
+    <div class="container">
+        <h1>Relatório - Produtos</h1>
 
-    <div id="popupContainer"></div>
+        <div id="popupContainer"></div>
 
-    <button onclick="exportarRelatorio()">Exportar relatório</button>
+        <button onclick="exportarRelatorio()">Exportar relatório</button>
 
-    <hr>
+        <hr>
 
-    <h1>Importar Produtos</h1>
+        <h1>Importar Produtos</h1>
 
-    <form id="importarForm" enctype="multipart/form-data">
-        <label for="jsonFile">Selecione o arquivo JSON:</label>
-        <input type="file" id="jsonFile" name="jsonFile" accept=".json">
-        <br>
-        <button type="button" onclick="enviarArquivo()">Enviar</button>
-    </form>
+        <form id="importarForm" enctype="multipart/form-data">
+            <label for="jsonFile">Selecione o arquivo JSON:</label>
+            <input type="file" id="jsonFile" name="jsonFile" accept=".json">
+            <br>
+            <button type="button" onclick="enviarArquivo()">Enviar</button>
+        </form>
+    </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.5/jszip.min.js"></script>
-
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
 
     <script>
@@ -93,31 +149,40 @@
         }
 
         function enviarArquivo() {
-            const input = document.getElementById('jsonFile');
-            const file = input.files[0];
+    const input = document.getElementById('jsonFile');
+    const file = input.files[0];
 
-            if (file) {
-                const formData = new FormData();
-                formData.append('jsonFile', file);
+    if (file) {
+        const reader = new FileReader();
 
-                fetch('/importar-produtos/', {
-                    method: 'POST',
-                    body: formData,
-                })
-                .then(response => response.json())
-                .then(data => {
-                    mostrarPopup('success', 'Arquivo importado com sucesso!');
-                    console.log(data);
-                })
-                .catch(error => {
-                    mostrarPopup('danger', 'Relatório exportado com sucesso!');
-                    console.error('Erro ao enviar arquivo:', error);
-                });
-            } else {
+        reader.onload = function (e) {
+            const jsonData = e.target.result;
+
+            // Modificação: Use a função fetch para enviar uma solicitação POST para a view Django
+            fetch('/importar-produtos/', {
+                method: 'POST',
+                body: `jsonData=${encodeURIComponent(jsonData)}`,
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+            })
+            .then(response => response.json())
+            .then(data => {
+                mostrarPopup('success', 'Arquivo importado com sucesso!');
+                console.log(data);
+            })
+            .catch(error => {
                 mostrarPopup('danger', 'Erro ao importar arquivo!');
-                console.error('Nenhum arquivo selecionado.');
-            }
-        }
+                console.error('Erro ao enviar arquivo:', error);
+            });
+        };
+
+        reader.readAsText(file);
+    } else {
+        mostrarPopup('danger', 'Erro ao importar arquivo!');
+        console.error('Nenhum arquivo selecionado.');
+    }
+}
     </script>
 </body>
 </html>
